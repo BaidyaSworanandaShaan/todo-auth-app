@@ -4,6 +4,9 @@ import Home from "./pages/Home/Home";
 import Register from "./pages/Registration/Register";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/dashboard";
+import ProtectedRoute from "../components/ProtectedRoutes";
+import { AuthProvider } from "../context/AuthContext";
+import AddTodos from "./pages/Todos/AddTodos";
 
 const router = createBrowserRouter([
   {
@@ -20,11 +23,27 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/add-todo",
+    element: (
+      <ProtectedRoute>
+        <AddTodos />
+      </ProtectedRoute>
+    ),
   },
 ]);
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

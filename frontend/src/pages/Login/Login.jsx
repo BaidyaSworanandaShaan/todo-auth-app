@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { loginSchema } from "../../validation/loginSchema";
 
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../../context/AuthContext";
+import axios from "axios";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const initialValues = {
     email: "",
@@ -17,18 +19,10 @@ const Login = () => {
   };
 
   const handleSubmit = async (values, { resetForm, setSubmitting }) => {
-    console.log(values);
     try {
       const response = await api.post(`${BACKEND_URL}/auth/login`, values);
       const token = response.data.accessToken;
-
-      const userData = {
-        id: jwtDecode(token).id,
-        email: jwtDecode(token).email,
-        role: jwtDecode(token).role,
-      };
-      console.log(userData);
-
+      login(token, response.data.user);
       resetForm();
       navigate("/dashboard", { replace: true });
     } catch (error) {
@@ -62,7 +56,7 @@ const Login = () => {
                   name="email"
                   type="email"
                   placeholder="Email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
                 <ErrorMessage
                   name="email"
@@ -77,7 +71,7 @@ const Login = () => {
                   name="password"
                   type="password"
                   placeholder="Password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
                 <ErrorMessage
                   name="password"

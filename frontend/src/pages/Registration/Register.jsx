@@ -55,7 +55,7 @@ const Register = () => {
                   name="username"
                   type="text"
                   placeholder="Username"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
                 <ErrorMessage
                   name="username"
@@ -70,7 +70,7 @@ const Register = () => {
                   name="email"
                   type="email"
                   placeholder="Email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
                 <ErrorMessage
                   name="email"
@@ -85,7 +85,7 @@ const Register = () => {
                   name="password"
                   type="password"
                   placeholder="Password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
                 <ErrorMessage
                   name="password"
@@ -100,7 +100,7 @@ const Register = () => {
                   name="confirmPassword"
                   type="password"
                   placeholder="Confirm Password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
                 />
                 <ErrorMessage
                   name="confirmPassword"

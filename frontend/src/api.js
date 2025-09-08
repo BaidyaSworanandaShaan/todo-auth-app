@@ -14,6 +14,7 @@ const api = axios.create({
 
 // Attach access token in headers
 api.interceptors.request.use((config) => {
+  console.log("Accesstoken", accessToken);
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -29,10 +30,11 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const res = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/auth/refresh`,
+          `${import.meta.env.VITE_BACKEND_URL}/auth/refresh-token`,
           {},
           { withCredentials: true }
         );
+        console.log(res.data);
         setAccessToken(res.data.accessToken);
         originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
         return api(originalRequest); // retry original request
