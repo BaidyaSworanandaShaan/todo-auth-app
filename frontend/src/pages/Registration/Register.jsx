@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { registrationSchema } from "../../validation/registrationSchema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Register = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const initialValues = {
     username: "",
@@ -13,7 +15,11 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   };
-
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, navigate]);
   const handleSubmit = async (values, { resetForm, setSubmitting }) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/auth/register`, {
