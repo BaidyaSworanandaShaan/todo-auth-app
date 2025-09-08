@@ -1,15 +1,16 @@
 import React from "react";
 import { useAuth } from "../../../context/AuthContext";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TodoSchema } from "../../validation/todoSchema";
 
 import axios from "axios";
 import PageHeader from "../../../components/PageHeader";
+import { useNavigate } from "react-router-dom";
 
 const AddTodo = () => {
   const { loading, accessToken } = useAuth();
-
+  const navigate = useNavigate();
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -20,14 +21,15 @@ const AddTodo = () => {
 
   const handleTodoSubmit = async (values, { resetForm }) => {
     try {
-      console.log(accessToken);
+      console.log(values);
 
-      const response = await axios.post("/todos", values, {
+      const response = await axios.post(`${BACKEND_URL}/todos`, values, {
         headers: { Authorization: `Bearer ${accessToken}` },
         withCredentials: true,
       });
       if (response.status === 201) {
         alert("Todo added successfully!");
+        navigate("/dashboard");
         resetForm();
       }
     } catch (error) {

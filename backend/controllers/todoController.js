@@ -1,7 +1,7 @@
 const pool = require("../config/db");
 
 const createTodoController = async (req, res) => {
-  const { title, description, due_date } = req.body;
+  const { title, description, due_date, status } = req.body;
   const userId = req.user.id;
 
   if (!title) {
@@ -10,8 +10,8 @@ const createTodoController = async (req, res) => {
 
   try {
     const [result] = await pool.query(
-      "INSERT INTO todos (user_id, title, description, due_date) VALUES (?, ?, ?, ?)",
-      [userId, title, description || null, due_date || null]
+      "INSERT INTO todos (user_id, title, description, due_date,status) VALUES (?, ?, ?, ?,?)",
+      [userId, title, description || null, due_date || null, status]
     );
 
     const newTodoId = result.insertId;
