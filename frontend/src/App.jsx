@@ -3,10 +3,11 @@ import "./App.css";
 import Home from "./pages/Home/Home";
 import Register from "./pages/Registration/Register";
 import Login from "./pages/Login/Login";
-import Dashboard from "./pages/Dashboard/dashboard";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoutes";
 import { AuthProvider } from "../context/AuthContext";
 import AddTodos from "./pages/Todos/AddTodos";
+import SingleTodo from "./pages/SingleTodo/SingleTodo";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AddTodos />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/todos/:id",
+    element: (
+      <ProtectedRoute>
+        <SingleTodo />
       </ProtectedRoute>
     ),
   },
