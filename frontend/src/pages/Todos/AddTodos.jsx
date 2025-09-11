@@ -1,11 +1,11 @@
 import React from "react";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TodoSchema } from "../../validation/todoSchema";
 
 import axios from "axios";
-import PageHeader from "../../../components/PageHeader";
+import PageHeader from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
 
 const AddTodo = () => {
@@ -96,50 +96,51 @@ const AddTodo = () => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
+              <div className="flex gap-3">
+                {/* Status */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Status
+                  </label>
+                  <Field
+                    as="select"
+                    name="status"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                  </Field>
+                  <ErrorMessage
+                    name="status"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-              {/* Status */}
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
-                  Status
-                </label>
-                <Field
-                  as="select"
-                  name="status"
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                </Field>
-                <ErrorMessage
-                  name="status"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              {/* Due Date */}
-              <div className="mb-6">
-                <label className="block text-gray-700 font-medium mb-2">
-                  Due Date
-                </label>
-                <Field
-                  type="date"
-                  name="due_date"
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-                />
-                <ErrorMessage
-                  name="due_date"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
+                {/* Due Date */}
+                <div className="mb-6">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Due Date
+                  </label>
+                  <Field
+                    type="date"
+                    name="due_date"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  />
+                  <ErrorMessage
+                    name="due_date"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                className="bg-green-600 text-white btn hover:bg-green-700"
               >
-                {isSubmitting ? "Adding..." : "Add Todo"}
+                {isSubmitting ? "Adding..." : "+ Add Todo"}
               </button>
             </Form>
           )}

@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg text-lg;
+  }
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white;
+  }
+  .btn-primary {
+    @apply bg-green-600 text-white  hover:bg-green-700 transition;
+  }
+  .btn-secondary {
+    @apply bg-blue-600 text-white  hover:bg-blue-700 transition;
+  }
+}

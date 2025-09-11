@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api";
 import { loginSchema } from "../../validation/loginSchema";
 
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -89,13 +89,19 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                className="w-full btn btn-primary"
               >
                 {isSubmitting ? "Login..." : "Login"}
               </button>
             </Form>
           )}
         </Formik>
+        <span className="mt-2 block text-center">
+          Don't have an account ?{" "}
+          <Link to="/register" className="underline">
+            Register
+          </Link>
+        </span>
       </div>
     </div>
   );

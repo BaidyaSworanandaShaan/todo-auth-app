@@ -2,8 +2,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../../../context/AuthContext";
-import TodoItem from "../../../components/TodoItem";
+import { useAuth } from "../../context/AuthContext";
+import TodoItem from "../../components/TodoItem";
+import PageHeader from "../../components/PageHeader";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const SingleTodo = () => {
   const { id } = useParams();
@@ -29,9 +30,8 @@ const SingleTodo = () => {
 
   return (
     <div className="p-10 mx-4 md:mx-10">
-      <div className="p-4 border">
-        <TodoItem todo={todo} setTodos={setTodo} />
-      </div>
+      <PageHeader title={"Detail Page"} />
+      <TodoItem todo={todo} setTodos={setTodo} />
     </div>
   );
 };

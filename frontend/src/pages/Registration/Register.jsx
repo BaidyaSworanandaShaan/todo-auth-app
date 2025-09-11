@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { registrationSchema } from "../../validation/registrationSchema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Register = () => {
@@ -118,13 +118,20 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                className="w-full btn-primary btn"
               >
                 {isSubmitting ? "Registering..." : "Register"}
               </button>
             </Form>
           )}
         </Formik>
+
+        <span className="mt-2 block text-center">
+          Already have an account ?{" "}
+          <Link to="/login" className="underline">
+            Login
+          </Link>
+        </span>
       </div>
     </div>
   );

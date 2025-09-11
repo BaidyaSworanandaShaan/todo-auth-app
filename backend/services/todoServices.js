@@ -20,11 +20,27 @@ async function createTodo(userId, { title, description, due_date, status }) {
   };
 }
 
-async function getAllTodos(userId) {
-  const [rows] = await pool.query("SELECT * FROM todos WHERE user_id = ?", [
-    userId,
-  ]);
-  return rows;
+async function getAllTodos(userId, todoStatus) {
+  let query = "SELECT * FROM todos WHERE user_id = ?";
+  const params = [userId];
+
+  if (todoStatus && todoStatus !== "all") {
+    query += " AND status = ?";
+    params.push(todoStatus);
+  }
+  const [rows] = await pool.query(query, params); // filtered todos
+
+  const [countRows] = await pool.query(
+    "SELECT status, COUNT(*) as count FROM todos WHERE user_id = ? GROUP BY status",
+    [userId]
+  );
+
+  const counts = { pending: 0, completed: 0 };
+  countRows.forEach((row) => {
+    counts[row.status] = row.count;
+  });
+
+  return { todos: rows, count: counts };
 }
 
 async function getSingleTodo(userId, todoId) {
