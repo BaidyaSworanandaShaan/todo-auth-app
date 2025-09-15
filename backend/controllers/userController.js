@@ -2,7 +2,9 @@ const pool = require("../config/db");
 
 const getAllUserController = async (_req, res) => {
   try {
-    const [rows] = await pool.query("SELECT id, email,name FROM users");
+    const [rows] = await pool.query(
+      "SELECT id, email,name FROM users Where role = 'user'"
+    );
 
     res.status(200).json({
       success: true,

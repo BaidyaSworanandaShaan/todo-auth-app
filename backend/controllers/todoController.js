@@ -1,6 +1,6 @@
 const {
   createTodo,
-  getAllTodos,
+  getAllTodosForUser,
   getSingleTodo,
   deleteTodo,
   updateTodo,
@@ -20,7 +20,7 @@ const getAllTodoController = async (req, res) => {
     const userId = req.user.id;
     const todoStatus = req.query.status || "all";
 
-    const { todos, count } = await getAllTodos(userId, todoStatus);
+    const { todos, count } = await getAllTodosForUser(userId, todoStatus);
 
     res.status(200).json({ success: true, todos, count });
   } catch (error) {

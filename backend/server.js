@@ -27,7 +27,9 @@ app.use(cors(corsOptions));
 // Routes
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/todos", require("./routes/todoRoutes"));
+app.use("/projects", require("./routes/projectRoutes"));
 app.use("/users", require("./routes/userRoutes"));
+app.use("/status", require("./routes/statusRoutes"));
 
 // Start server
 app.listen(port, () => {

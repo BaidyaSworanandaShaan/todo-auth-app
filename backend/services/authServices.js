@@ -16,7 +16,7 @@ async function registerUser({ name, email, password, role = "user" }) {
 
   const hashedPwd = await bcrypt.hash(password, 10);
   const [result] = await pool.query(
-    "INSERT INTO users (email, password_hash, name, role) VALUES (?, ?, ?, ?)",
+    "INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)",
     [email, hashedPwd, name, role]
   );
   return result.insertId;
@@ -34,7 +34,7 @@ async function loginUser({ email, password }) {
   }
 
   // validate password
-  const isMatch = await bcrypt.compare(password, user.password_hash);
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw new Error("Invalid credentials");
   }

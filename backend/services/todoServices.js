@@ -1,46 +1,67 @@
 const pool = require("../config/db");
 
-async function createTodo(userId, { title, description, due_date, status }) {
+async function createTodo(
+  userId,
+  {
+    project_id,
+    assignee_id = null,
+    status_id,
+    title,
+    priority = 0,
+    estimate_hours = null,
+    due_at = null,
+    completed_at = null,
+    tags = null,
+  }
+) {
   if (!title) {
     throw new Error("Title is required");
   }
+  if (!project_id) {
+    throw new Error("Project ID is required");
+  }
+  if (!status_id) {
+    throw new Error("Status ID is required");
+  }
 
   const [result] = await pool.query(
-    "INSERT INTO todos (user_id, title, description, due_date, status) VALUES (?, ?, ?, ?, ?)",
-    [userId, title, description || null, due_date || null, status || "pending"]
+    `INSERT INTO todos 
+      (project_id, assignee_id, status_id, title, priority, estimate_hours, created_at, due_at, completed_at, tags) 
+     VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)`,
+    [
+      project_id,
+      assignee_id,
+      status_id,
+      title,
+      priority,
+      estimate_hours,
+      due_at,
+      completed_at,
+      tags ? JSON.stringify(tags) : null, // store JSON as string
+    ]
   );
 
   return {
     id: result.insertId,
-    user_id: userId,
+    project_id,
+    assignee_id,
+    status_id,
     title,
-    description,
-    due_date,
-    status: status || "pending",
+    priority,
+    estimate_hours,
+    created_at: new Date(),
+    due_at,
+    completed_at,
+    tags,
   };
 }
 
-async function getAllTodos(userId, todoStatus) {
-  let query = "SELECT * FROM todos WHERE user_id = ?";
+async function getAllTodosForUser(userId) {
+  let query = "SELECT * FROM todos WHERE assignee_id = ?";
   const params = [userId];
-
-  if (todoStatus && todoStatus !== "all") {
-    query += " AND status = ?";
-    params.push(todoStatus);
-  }
   const [rows] = await pool.query(query, params); // filtered todos
 
-  const [countRows] = await pool.query(
-    "SELECT status, COUNT(*) as count FROM todos WHERE user_id = ? GROUP BY status",
-    [userId]
-  );
-
-  const counts = { pending: 0, completed: 0 };
-  countRows.forEach((row) => {
-    counts[row.status] = row.count;
-  });
-
-  return { todos: rows, count: counts };
+  return { todos: rows };
 }
 
 async function getSingleTodo(userId, todoId) {
@@ -103,7 +124,7 @@ async function updateTodo(
 
 module.exports = {
   createTodo,
-  getAllTodos,
+  getAllTodosForUser,
   getSingleTodo,
   deleteTodo,
   updateTodo,
