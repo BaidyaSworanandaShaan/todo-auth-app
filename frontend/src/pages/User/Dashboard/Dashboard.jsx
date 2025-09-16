@@ -12,18 +12,12 @@ const Dashboard = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  const {
-    projects,
-    setProjects,
-    loading: projectsLoading,
-    error: projectsError,
-  } = useProjects();
+  const { projects, setProjects, loading: projectsLoading } = useProjects();
 
   const {
     todos,
     setTodos,
     loading: todosLoading,
-    error: todosError,
   } = useTodos({ assigneeId: user?.id });
 
   if (loading || projectsLoading || todosLoading) {
@@ -45,10 +39,7 @@ const Dashboard = () => {
       <section className="project-section">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold my-4">Recent Projects</h2>
-          <button
-            className="mt-3 btn"
-            onClick={() => navigate("/projects/add")}
-          >
+          <button className="mt-3 btn" onClick={() => navigate("/projects")}>
             View All
           </button>
         </div>
@@ -80,14 +71,13 @@ const Dashboard = () => {
             View All
           </button>
         </div>
-
         <div className="mb-5">
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {todos.slice(0, 8).map((todo) => (
               <TodoItem key={todo.id} todo={todo} setTodos={setTodos} />
             ))}
           </ul>
-        </div>
+        </div>{" "}
         <button
           className="mt-3 btn btn-secondary"
           onClick={() => navigate("/todos/add")}

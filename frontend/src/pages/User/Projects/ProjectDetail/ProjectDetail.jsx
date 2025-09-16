@@ -1,11 +1,12 @@
 import PageHeader from "../../../../components/PageHeader";
 import { useProjectDetail } from "../../../../hooks/useProjectDetail";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TodoItem from "../../../../components/User/TodoItem";
 import ProjectStats from "../../../../components/User/ProjectStats";
 
 const ProjectDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { project, todos, stats, setTodos, loading, error } = useProjectDetail({
     projectId: id,
   });
@@ -17,20 +18,19 @@ const ProjectDetail = () => {
   return (
     <div className="p-10 md:mx-10 space-y-6">
       <PageHeader title="Project Detail" />
-      {/* Project Stats */}
-
       {/* Project Card */}
       <div className=" p-6 border">
         <h2 className="text-xl font-semibold mb-2">{project.project_name}</h2>
-
         <p className="text-gray-600">
           Due Date: {new Date(project.project_due_date).toLocaleDateString()}
         </p>
         <p className="text-gray-600">
           Created At:{" "}
           {new Date(project.project_created_at).toLocaleDateString()}
-        </p>
-      </div>
+        </p>{" "}
+        <button className="btn-small btn-danger mt-3">Delete</button>
+      </div>{" "}
+      {/* Project Stats */}
       <ProjectStats stats={stats} />
       {/* Todos */}
       <div>
@@ -47,6 +47,12 @@ const ProjectDetail = () => {
           </div>
         )}
       </div>
+      <button
+        className="mt-3 btn btn-secondary"
+        onClick={() => navigate("/todos/add")}
+      >
+        + Add New Todos
+      </button>
     </div>
   );
 };

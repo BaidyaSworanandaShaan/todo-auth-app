@@ -63,7 +63,7 @@ const AddTodo = () => {
     <div className="p-10 mx-4 md:mx-10">
       <PageHeader title="Add Todo" />
 
-      <div className="mt-5 p-6    bg-white">
+      <div className="mt-5">
         <Formik
           initialValues={{
             title: "",

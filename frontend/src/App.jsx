@@ -15,6 +15,7 @@ import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import AddTodo from "./pages/User/Todos/AddTodos/AddTodos";
 import AddProjects from "./pages/User/Projects/AddProjects/AddProjects";
 import ProjectDetail from "./pages/User/Projects/ProjectDetail/ProjectDetail";
+import AllProjects from "./pages/User/Projects/AllProjects/AllProjects";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <SingleTodo />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/projects",
+    element: (
+      <ProtectedRoute>
+        <AllProjects />
       </ProtectedRoute>
     ),
   },
