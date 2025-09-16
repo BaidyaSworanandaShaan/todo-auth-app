@@ -2,9 +2,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
-import TodoItem from "../../components/TodoItem";
-import PageHeader from "../../components/PageHeader";
+import { useAuth } from "../../../../context/AuthContext";
+import TodoItem from "../../../../components/User/TodoItem";
+import PageHeader from "../../../../components/PageHeader";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const SingleTodo = () => {
   const { id } = useParams();

@@ -20,7 +20,11 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/dashboard", { replace: true });
+      if (user.role === "admin") {
+        navigate("/admin-dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
     }
   }, [user, navigate]);
 
@@ -28,9 +32,14 @@ const Login = () => {
     try {
       const response = await api.post(`${BACKEND_URL}/auth/login`, values);
       const token = response.data.accessToken;
-      login(token, response.data.user);
+      const userData = response.data.user;
+      login(token, userData);
       resetForm();
-      navigate("/dashboard", { replace: true });
+      if (userData.role === "admin") {
+        navigate("/admin-dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message);

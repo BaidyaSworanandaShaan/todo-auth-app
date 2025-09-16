@@ -1,71 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-
-import { getTodos } from "../../services/todoServices";
-import PageHeader from "../../components/PageHeader";
-import TodoItem from "../../components/TodoItem";
-
-const Dashboard = () => {
-  const { user, accessToken, loading } = useAuth();
-  const navigate = useNavigate();
-
-  // Filter state
-  const [todoFilter, setTodoFilter] = useState("all");
-
-  // Todos and counts
-  const [todos, setTodos] = useState([]);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [completedCount, setCompletedCount] = useState(0);
-
-  // Error state
-  const [error, setError] = useState(null);
-
-  // Fetch todos whenever accessToken or filter changes
-  useEffect(() => {
-    if (!accessToken) return;
-
-    const fetchTodos = async () => {
-      try {
-        const { todos, count } = await getTodos(accessToken, todoFilter);
-        setTodos(todos);
-        setPendingCount(count.pending || 0);
-        setCompletedCount(count.completed || 0);
-        setError(null);
-      } catch (err) {
-        setError(
-          err.response?.data?.message || err.message || "Something went wrong"
-        );
-      }
-    };
-
-    fetchTodos();
-  }, [accessToken, todoFilter]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500 text-lg">Loading...</p>
-      </div>
-    );
-  }
-
-  //Pagination
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6);
-
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-
-  const currentTodos = todos.slice(startIndex, endIndex);
-  return (
-    <div className="p-10 md:mx-10">
-      <PageHeader title="Dashboard" />
-      <span className="font-semibold text-xl block my-5">
-        Hello, {user?.email}! 👋
-      </span>
-
-      <section className="todos-section">
+ <section className="todos-section">
         {/* Stats */}
         <div className="flex gap-4 mb-6">
           <div
@@ -161,8 +94,3 @@ const Dashboard = () => {
         {/* Error */}
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </section>
-    </div>
-  );
-};
-
-export default Dashboard;

@@ -59,8 +59,7 @@ async function createTodo(
 async function getAllTodosForUser(userId) {
   let query = "SELECT * FROM todos WHERE assignee_id = ?";
   const params = [userId];
-  const [rows] = await pool.query(query, params); // filtered todos
-
+  const [rows] = await pool.query(query, params);
   return { todos: rows };
 }
 

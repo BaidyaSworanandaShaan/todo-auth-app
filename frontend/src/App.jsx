@@ -4,11 +4,17 @@ import Home from "./pages/Home/Home";
 import Register from "./pages/Registration/Register";
 import Login from "./pages/Login/Login";
 
-import ProtectedRoute from "./components/ProtectedRoutes";
+import ProtectedRoute from "./components/User/ProtectedRoutes";
 import { AuthProvider } from "./context/AuthContext";
-import AddTodos from "./pages/Todos/AddTodos";
-import SingleTodo from "./pages/SingleTodo/SingleTodo";
-import Dashboard from "./pages/Dashboard/dashboard";
+
+import SingleTodo from "./pages/User/Todos/SingleTodo/SingleTodo";
+import Dashboard from "./pages/User/Dashboard/dashboard";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import ProtectedAdminRoute from "./components/Admin/ProtectedAdminRoutes";
+import Unauthorized from "./pages/Unauthorized/Unauthorized";
+import AddTodo from "./pages/User/Todos/AddTodos/AddTodos";
+import AddProjects from "./pages/User/Projects/AddProjects/AddProjects";
+import ProjectDetail from "./pages/User/Projects/ProjectDetail/ProjectDetail";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +30,10 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/unauthorized",
+    element: <Unauthorized />,
+  },
+  {
     path: "/dashboard",
     element: (
       <ProtectedRoute>
@@ -32,10 +42,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/add-todo",
+    path: "/todos/add",
     element: (
       <ProtectedRoute>
-        <AddTodos />
+        <AddTodo />
       </ProtectedRoute>
     ),
   },
@@ -45,6 +55,30 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <SingleTodo />
       </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/projects/add",
+    element: (
+      <ProtectedRoute>
+        <AddProjects />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/projects/:id",
+    element: (
+      <ProtectedRoute>
+        <ProjectDetail />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin-dashboard",
+    element: (
+      <ProtectedAdminRoute>
+        <AdminDashboard />
+      </ProtectedAdminRoute>
     ),
   },
 ]);

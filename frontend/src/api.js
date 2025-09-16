@@ -12,20 +12,12 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Attach access token in headers
-api.interceptors.request.use((config) => {
-  console.log("Accesstoken", accessToken);
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return config;
-});
-
 // Handle 401 and refresh token automatically
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {

@@ -18,11 +18,10 @@ const createTodoController = async (req, res) => {
 const getAllTodoController = async (req, res) => {
   try {
     const userId = req.user.id;
-    const todoStatus = req.query.status || "all";
 
-    const { todos, count } = await getAllTodosForUser(userId, todoStatus);
+    const { todos } = await getAllTodosForUser(userId);
 
-    res.status(200).json({ success: true, todos, count });
+    res.status(200).json({ success: true, todos });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

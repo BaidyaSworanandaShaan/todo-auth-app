@@ -1,6 +1,9 @@
 const {
   createProject,
   getAllProjectsOfUser,
+
+  getSingleProjectWithTodo,
+  getSingleProjectStats,
 } = require("../services/projectServices");
 
 const createProjectController = async (req, res) => {
@@ -39,7 +42,37 @@ const getProjectController = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const getProjectWithTodoController = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const projectId = req.params.id;
+    const { project, todos } = await getSingleProjectWithTodo(
+      userId,
+      projectId
+    );
+
+    res.status(200).json({ success: true, project, todos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+const getSingleProjectStatsController = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const projectId = req.params.id;
+    console.log("Project ID ", projectId);
+    const { projectStats } = await getSingleProjectStats(userId, projectId);
+
+    res.status(200).json({ success: true, projectStats });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 module.exports = {
   createProjectController,
   getProjectController,
+  getProjectWithTodoController,
+  getSingleProjectStatsController,
 };
