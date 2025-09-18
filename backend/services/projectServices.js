@@ -68,14 +68,14 @@ const getSingleProjectWithTodo = async (userId, projectId) => {
 //For each project, compute: total todos, open todos, closed todos
 
 const getSingleProjectStats = async (userId, projectId) => {
-  console.log(userId, projectId);
   const [rows] = await pool.query(
     `SELECT
        p.id AS project_id,
        p.name AS project_name,
        COUNT(t.id) AS total_todos,
-       SUM(CASE WHEN s.is_closed = FALSE THEN 1 ELSE 0 END) AS open_todos,
-       SUM(CASE WHEN s.is_closed = TRUE THEN 1 ELSE 0 END) AS closed_todos
+       SUM(CASE WHEN s.code = 'OPEN' THEN 1 ELSE 0 END) AS open_todos,
+       SUM(CASE WHEN s.code = 'IN_PROGRESS' THEN 1 ELSE 0 END) AS in_progress_todos,
+       SUM(CASE WHEN s.code = 'CLOSED' THEN 1 ELSE 0 END) AS closed_todos
      FROM projects p
      LEFT JOIN todos t ON t.project_id = p.id
      LEFT JOIN status s ON t.status_id = s.id
@@ -87,10 +87,20 @@ const getSingleProjectStats = async (userId, projectId) => {
 
   return { projectStats: rows[0] || null };
 };
-
+const deleteProject = async (userId, projectId) => {
+  const [result] = await pool.query(
+    "DELETE FROM projects WHERE id = ? AND owner_id = ?",
+    [projectId, userId]
+  );
+  if (result.affectedRows === 0) {
+    throw new Error("Project not found");
+  }
+  return true;
+};
 module.exports = {
   createProject,
   getAllProjectsOfUser,
   getSingleProjectWithTodo,
   getSingleProjectStats,
+  deleteProject,
 };

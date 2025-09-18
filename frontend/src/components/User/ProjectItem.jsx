@@ -32,7 +32,8 @@ const ProjectItem = ({ project, setProjects }) => {
     <>
       <li
         key={project.project_id}
-        className="p-4 rounded border flex flex-col justify-between"
+        onClick={() => navigate(`/projects/${project.project_id}`)}
+        className="p-4 rounded border flex flex-col justify-between transition-transform duration-200 hover:scale-105 hover:shadow-sm hover:cursor-pointer"
       >
         <div>
           <h3 className="font-semibold text-lg">{project.project_name}</h3>
@@ -46,12 +47,12 @@ const ProjectItem = ({ project, setProjects }) => {
           </p>
         </div>
 
-        <button
-          onClick={() => navigate(`/projects/${project.project_id}`)} // navigate to project details
+        {/* <button
+          // navigate to project details
           className="mt-3 btn btn-primary"
         >
           View Details
-        </button>
+        </button> */}
       </li>
     </>
   );

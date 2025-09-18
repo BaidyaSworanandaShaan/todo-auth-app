@@ -1,28 +1,31 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import PageHeader from "../../../../components/PageHeader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../../../context/AuthContext";
 import { TodoSchema } from "../../../../validation/todoSchema";
-import axios from "axios";
-import { useProjects } from "../../../../hooks/useProjects";
+
 import { useStatus } from "../../../../hooks/useStatus";
+import { useProjectDetail } from "../../../../hooks/useProjectDetail";
+import api from "../../../../api";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AddTodo = () => {
   const { loading: authLoading, accessToken, user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get("projectId");
 
   const {
-    projects,
-    loading: projectsLoading,
-    error: projectsError,
-  } = useProjects();
+    project,
+    loading: projectLoading,
+    error: projectError,
+  } = useProjectDetail({ projectId });
 
   const { status, loading: statusLoading, error: statusError } = useStatus();
 
-  if (authLoading || projectsLoading || statusLoading) {
+  if (authLoading || projectLoading || statusLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <p className="text-gray-500 text-lg">Loading...</p>
@@ -30,8 +33,8 @@ const AddTodo = () => {
     );
   }
 
-  if (projectsError)
-    return <p className="text-red-500">Failed to load projects</p>;
+  if (projectError)
+    return <p className="text-red-500">Failed to load project</p>;
   if (statusError)
     return <p className="text-red-500">Failed to load status options</p>;
 
@@ -44,7 +47,7 @@ const AddTodo = () => {
           : [],
       };
 
-      const response = await axios.post(`${BACKEND_URL}/todos`, payload, {
+      const response = await api.post(`${BACKEND_URL}/todos`, payload, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
@@ -69,9 +72,9 @@ const AddTodo = () => {
             title: "",
             description: "",
             assignee_id: user?.id,
-            project_id: "",
+            project_id: project?.project_id,
             status_id: "",
-            due_date: "",
+            due_at: "",
             priority: 1,
             tags: "",
             estimateHours: "",
@@ -103,25 +106,20 @@ const AddTodo = () => {
               {/* Project */}
               <div className="mb-4">
                 <label className="block font-medium text-gray-700 mb-1">
-                  Project <span className="text-red-500">*</span>
+                  Project
                 </label>
                 <Field
-                  as="select"
+                  type="hidden"
                   name="project_id"
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-                  required
-                >
-                  <option value="">Select project</option>
-                  {projects.map((project) => (
-                    <option key={project.project_id} value={project.project_id}>
-                      {project.project_name}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage
-                  name="project_id"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
+                  value={project.project_id}
+                />
+
+                {/* Disabled input to show project name */}
+                <input
+                  type="text"
+                  value={project.project_name} // what user sees
+                  disabled
+                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 text-gray-700 cursor-not-allowed focus:outline-none"
                 />
               </div>
 
@@ -157,12 +155,12 @@ const AddTodo = () => {
                   </label>
                   <Field
                     type="date"
-                    name="due_date"
+                    name="due_at"
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
                     required
                   />
                   <ErrorMessage
-                    name="due_date"
+                    name="due_at"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
@@ -221,9 +219,7 @@ const AddTodo = () => {
               {/* Submit */}
               <button
                 type="submit"
-                disabled={
-                  isSubmitting || projects.length === 0 || status.length === 0
-                }
+                disabled={isSubmitting || status.length === 0}
                 className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition-colors"
               >
                 {isSubmitting ? "Adding..." : "+ Add Todo"}

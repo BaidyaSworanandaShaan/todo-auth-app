@@ -15,7 +15,7 @@ export const useProjects = () => {
       try {
         setLoading(true);
         const { projects } = await getAllProjectsOfUser(accessToken);
-        console.log(projects, "PROJECTS");
+
         setProjects(projects);
         setError(null);
       } catch (err) {

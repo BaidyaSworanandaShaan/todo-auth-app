@@ -19,7 +19,7 @@ const corsOptions = {
   origin: "http://localhost:5173", // frontend URL
   credentials: true, // allow cookies to be sent
   allowedHeaders: ["Content-Type", "Authorization"], // allow custom headers
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allowed HTTP methods
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"], // allowed HTTP methods
 };
 
 app.use(cors(corsOptions));

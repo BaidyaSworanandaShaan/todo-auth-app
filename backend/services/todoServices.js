@@ -76,7 +76,7 @@ async function getSingleTodo(userId, todoId) {
 
 async function deleteTodo(userId, todoId) {
   const [result] = await pool.query(
-    "DELETE FROM todos WHERE id = ? AND user_id = ?",
+    "DELETE FROM todos WHERE id = ? AND assignee_id = ?",
     [todoId, userId]
   );
   if (result.affectedRows === 0) {
@@ -85,13 +85,10 @@ async function deleteTodo(userId, todoId) {
   return true;
 }
 
-async function updateTodo(
-  userId,
-  todoId,
-  { title, description, due_date, status }
-) {
+async function updateTodoStatus(userId, todoId, status_id) {
+  // First, check if the todo exists for this user
   const [rows] = await pool.query(
-    "SELECT * FROM todos WHERE id = ? AND user_id = ?",
+    "SELECT * FROM todos WHERE id = ? AND assignee_id = ?",
     [todoId, userId]
   );
 
@@ -99,26 +96,13 @@ async function updateTodo(
     throw new Error("Todo not found");
   }
 
-  const updatedTodo = {
-    title: title || rows[0].title,
-    description: description || rows[0].description,
-    due_date: due_date || rows[0].due_date,
-    status: status || rows[0].status,
-  };
-
+  // Update only the status
   await pool.query(
-    "UPDATE todos SET title = ?, description = ?, due_date = ?, status = ? WHERE id = ? AND user_id = ?",
-    [
-      updatedTodo.title,
-      updatedTodo.description,
-      updatedTodo.due_date,
-      updatedTodo.status,
-      todoId,
-      userId,
-    ]
+    "UPDATE todos SET status_id = ? WHERE id = ? AND assignee_id = ?",
+    [status_id, todoId, userId]
   );
 
-  return { id: todoId, user_id: userId, ...updatedTodo };
+  return { id: todoId, user_id: userId, status_id };
 }
 
 module.exports = {
@@ -126,5 +110,5 @@ module.exports = {
   getAllTodosForUser,
   getSingleTodo,
   deleteTodo,
-  updateTodo,
+  updateTodoStatus,
 };

@@ -42,6 +42,7 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+
   {
     path: "/todos/add",
     element: (

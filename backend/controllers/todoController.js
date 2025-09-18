@@ -3,7 +3,7 @@ const {
   getAllTodosForUser,
   getSingleTodo,
   deleteTodo,
-  updateTodo,
+  updateTodoStatus,
 } = require("../services/todoServices");
 
 const createTodoController = async (req, res) => {
@@ -52,18 +52,28 @@ const deleteTodoController = async (req, res) => {
   }
 };
 
-const updateTodoController = async (req, res) => {
+const updateTodoStatusController = async (req, res) => {
   try {
-    const updatedTodo = await updateTodo(req.user.id, req.params.id, req.body);
+    const userId = req.user.id;
+    const todoId = req.params.id;
+    const { status_id } = req.body;
+
+    if (!status_id) {
+      return res.status(400).json({ message: "Status ID is required" });
+    }
+
+    const updatedTodo = await updateTodoStatus(userId, todoId, status_id);
+
     res.status(200).json({
-      success: true,
-      message: "Todo updated successfully",
+      message: "Todo status updated successfully",
       todo: updatedTodo,
     });
   } catch (error) {
-    res
-      .status(error.message === "Todo not found" ? 404 : 500)
-      .json({ message: error.message });
+    if (error.message === "Todo not found") {
+      return res.status(404).json({ message: error.message });
+    }
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -72,5 +82,5 @@ module.exports = {
   getAllTodoController,
   getSingleTodoController,
   deleteTodoController,
-  updateTodoController,
+  updateTodoStatusController,
 };

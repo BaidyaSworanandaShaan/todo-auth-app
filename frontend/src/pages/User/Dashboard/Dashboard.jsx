@@ -66,10 +66,7 @@ const Dashboard = () => {
       {/* Todos Section */}
       <section className="todo-section mt-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold my-4">List of Todos</h2>
-          <button className="mt-3 btn" onClick={() => navigate("/todos/add")}>
-            View All
-          </button>
+          <h2 className="text-xl font-semibold my-4">List of Recent Todos</h2>
         </div>
         <div className="mb-5">
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -78,12 +75,6 @@ const Dashboard = () => {
             ))}
           </ul>
         </div>{" "}
-        <button
-          className="mt-3 btn btn-secondary"
-          onClick={() => navigate("/todos/add")}
-        >
-          + Add New Todos
-        </button>
       </section>
     </div>
   );

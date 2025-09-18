@@ -3,9 +3,9 @@ const authMiddleware = require("../middlewares/authmiddleware");
 const {
   createTodoController,
   getAllTodoController,
-  getSingleTodoController,
+
   deleteTodoController,
-  updateTodoController,
+  updateTodoStatusController,
 } = require("../controllers/todoController");
 
 const router = express.Router();
@@ -13,8 +13,8 @@ const router = express.Router();
 router.post("/", authMiddleware, createTodoController);
 
 router.get("/", authMiddleware, getAllTodoController);
-router.get("/:id", authMiddleware, getSingleTodoController);
-router.patch("/:id", authMiddleware, updateTodoController);
+
+router.patch("/:id", authMiddleware, updateTodoStatusController);
 router.delete("/:id", authMiddleware, deleteTodoController);
 
 module.exports = router;

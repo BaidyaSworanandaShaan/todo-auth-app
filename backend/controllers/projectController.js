@@ -4,6 +4,7 @@ const {
 
   getSingleProjectWithTodo,
   getSingleProjectStats,
+  deleteProject,
 } = require("../services/projectServices");
 
 const createProjectController = async (req, res) => {
@@ -61,7 +62,7 @@ const getSingleProjectStatsController = async (req, res) => {
   try {
     const userId = req.user.id;
     const projectId = req.params.id;
-    console.log("Project ID ", projectId);
+
     const { projectStats } = await getSingleProjectStats(userId, projectId);
 
     res.status(200).json({ success: true, projectStats });
@@ -70,9 +71,28 @@ const getSingleProjectStatsController = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+const deleteProjectController = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const projectId = req.params.id;
+
+    await deleteProject(userId, projectId);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Project deleted successfully" });
+  } catch (error) {
+    res
+      .status(error.message === "Project not found" ? 404 : 500)
+      .json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProjectController,
   getProjectController,
   getProjectWithTodoController,
   getSingleProjectStatsController,
+  deleteProjectController,
 };
