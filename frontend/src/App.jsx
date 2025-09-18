@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/User/ProtectedRoutes";
 import { AuthProvider } from "./context/AuthContext";
 
 import SingleTodo from "./pages/User/Todos/SingleTodo/SingleTodo";
-import Dashboard from "./pages/User/Dashboard/dashboard";
+import Dashboard from "./pages/User/Dashboard/Dashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ProtectedAdminRoute from "./components/Admin/ProtectedAdminRoutes";
 import Unauthorized from "./pages/Unauthorized/Unauthorized";
